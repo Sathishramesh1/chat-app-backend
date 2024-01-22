@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
-import { Chat } from "../model/chatModel";
-import { User } from "../model/userModel";
+
+import { Chat } from "../model/chatModel.js";
+import { User } from "../model/userModel.js";
 
 
-const accessChat=async(req,res)=>{
+export const accessChat=async(req,res)=>{
     
     const {userId}=req.body;
 

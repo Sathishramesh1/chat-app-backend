@@ -1,10 +1,10 @@
 
 import bcrypt from 'bcrypt'
-import {User} from '../Models/UserModel.js';
+import {User} from '../model/userModel.js';
 import crypto from 'crypto'
 
 import jwt from 'jsonwebtoken'
-import { Url } from '../Models/UrlModel.js';
+
 
 
 //function to handle new user registration
@@ -21,15 +21,15 @@ export const Register=async(req,res)=>{
     const hashedPassword = await bcrypt.hash(password,10);
     
     // Generate a ActivationKey
- const ActivationKey = jwt.sign({id:req.body.email}, process.env.SECRET_KEY);;
+//  const ActivationKey = jwt.sign({id:req.body.email}, process.env.SECRET_KEY);;
  
 
-    const newUser= await new User({ ...req.body, password: hashedPassword ,activationKey:ActivationKey}).save();
+    const newUser= await new User({ ...req.body, password: hashedPassword }).save();
 
-const activationurl=`https://url-shortner96.netlify.app/activate/${ActivationKey}`
-    sendMail(req.body.email,"Activation Link",`
-    Click below link to activate your account
-    ${activationurl}`);
+// const activationurl=`https://url-shortner96.netlify.app/activate/${ActivationKey}`
+//     sendMail(req.body.email,"Activation Link",`
+//     Click below link to activate your account
+//     ${activationurl}`);
     
     res.status(201).json({
         status:'success',

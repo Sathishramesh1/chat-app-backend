@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 
 const dbconnection = async function  dataBaseConnection() {
     const params = {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+      // useNewUrlParser: true,
+      // useUnifiedTopology: true,
     };
     try {
       mongoose.set("strictQuery", true);
