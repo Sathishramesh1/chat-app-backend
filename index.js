@@ -26,7 +26,7 @@ const PORT=process.env.PORT;
 
 //ROUTES
 app.use("/api",UserRouter);
-app.use("/mail",isAuthorized,ChatRouter);
+app.use("/chat",isAuthorized,ChatRouter);
 
 app.get("/",(req,res)=>{
     res.status(200).send("server working");

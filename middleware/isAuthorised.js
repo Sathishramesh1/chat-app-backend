@@ -6,7 +6,6 @@ import jwt from 'jsonwebtoken'
   }
 
 
-
 // custom middleware
 const isAuthorized = async (req,res,next) => {
     let token;
