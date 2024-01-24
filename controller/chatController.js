@@ -96,7 +96,7 @@ export const createGroupChat = async (req, res) => {
       const groupChat = await Chat.create({
         chatName: req.body.name,
         users: users,
-        isGroupChat: true,
+        isGroupChat:true,
         groupAdmin: req.user,
       });
   
@@ -111,3 +111,82 @@ export const createGroupChat = async (req, res) => {
     }
   };
   
+
+  //group rename
+
+  export const groupRenaming=async(req,res)=>{
+
+    try {
+
+       const {chatId,chatName}=req.body
+
+       const updatedChat=await Chat.findOneAndUpdate({_id:chatId},
+        {chatName:chatName},{
+        new:true
+        
+       }).populate("users","-password").populate("groupAdmin","-password")
+
+       if(!updatedChat){
+
+        return res.status(404).send("Unable to find the Chat");
+       }
+
+       return res.status(200).json(updatedChat);
+        
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send("Internal Server Error");
+    }
+  }
+
+
+  //removing user from group
+
+  export const removeUserFromGroup=async(req,res)=>{      
+    
+     try {
+        const { chatId, userId } = req.body;
+
+        const chat = await Chat.findById(chatId);
+
+  if (!chat) {
+    res.status(404);
+    throw new Error("Chat Not Found");
+  }
+
+
+  // Check if the requester's ID is in the 'groupAdmin' array
+  if (chat.groupAdmin.toString() !== req.user._id.toString()) {
+    res.status(403);
+    throw new Error("Permission Denied: Only admins can perform this action");
+  }
+
+  // Using the Chat document by pulling the userId from the 'users' array
+  const removed = await Chat.findByIdAndUpdate(
+    chatId,
+    {
+      $pull: { users: userId },
+    },
+    {
+      new: true,
+    }
+  )
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
+
+  // Check if the Chat document was not found
+  if (!removed) {
+    res.status(404);
+    throw new Error("Chat Not Found");
+  } else {
+   return  res.status(200).json(removed);
+
+}       
+     } catch (error) {
+        console.error(error);
+        return res.status(500).send("Internal Server Error");
+        
+     }
+
+
+  }
