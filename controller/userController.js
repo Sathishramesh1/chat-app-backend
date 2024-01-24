@@ -55,10 +55,10 @@ if (!user) {
     return res.status(401).json({ message: "Email is not Registered" });
       }
 
- if(!user.isActivated){
-    return res.status(401).json({message:'Your account not activated,Check the registered Email to Activated account'});
+//  if(!user.isActivated){
+//     return res.status(401).json({message:'Your account not activated,Check the registered Email to Activated account'});
 
- }     
+//  }     
 
 const passwordMatch = await bcrypt.compare(password, user.password);
 
