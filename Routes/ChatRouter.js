@@ -1,5 +1,5 @@
 import express from 'express'
-import { accessChat, createGroupChat, getChat, groupRenaming, removeUserFromGroup } from '../controller/chatController.js';
+import { accessChat, addUser, createGroupChat, getChat, groupRenaming, removeUserFromGroup } from '../controller/chatController.js';
 
 
 
@@ -16,7 +16,7 @@ router.route("/group").post(createGroupChat);
 
 router.route("/rename").put(groupRenaming)
 router.route("/removeuser").put(removeUserFromGroup);
-router.route("/groupadd").put();
+router.route("/groupadd").put(addUser);
 
 
 

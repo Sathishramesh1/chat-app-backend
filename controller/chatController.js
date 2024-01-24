@@ -190,3 +190,42 @@ export const createGroupChat = async (req, res) => {
 
 
   }
+
+  //add new user to group
+
+  export const addUser=async(req,res)=>{
+    
+    try {
+      const {chatId,userId}=req.body;
+
+      if(!chatId || !userId){
+        res.status(404);
+    throw new Error("Chat Not Found");
+      }
+      const addedUser = await Chat.findByIdAndUpdate(
+        chatId,
+        {
+          $push: { users: userId },
+        },
+        {
+          new: true,
+        }
+      )
+        .populate("users", "-password")
+        .populate("groupAdmin", "-password");
+
+     
+  if (!added) {
+       res.status(404);
+        throw new Error("Chat Not Found");
+  } else {
+       return  res.status(200).json(added);
+  }
+      
+    } catch (error) {
+      console.error(error);
+        return res.status(500).send("Internal Server Error");
+        
+      
+    }
+  }
