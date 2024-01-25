@@ -141,9 +141,7 @@ export const createGroupChat = async (req, res) => {
 
 
   //removing user from group
-
   export const removeUserFromGroup=async(req,res)=>{      
-    
      try {
         const { chatId, userId } = req.body;
 
@@ -185,16 +183,13 @@ export const createGroupChat = async (req, res) => {
      } catch (error) {
         console.error(error);
         return res.status(500).send("Internal Server Error");
-        
      }
-
 
   }
 
   //add new user to group
-
   export const addUser=async(req,res)=>{
-    
+  
     try {
       const {chatId,userId}=req.body;
 
