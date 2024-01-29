@@ -18,12 +18,10 @@ app.use(cors());
 app.use(express.json());
 
 
-
 //database connection
 dbconnection();
 
 const PORT=process.env.PORT;
-
 
 //ROUTES
 app.use("/api",UserRouter);
@@ -33,8 +31,6 @@ app.use("/message",isAuthorized,MessageRoute);
 app.get("/",(req,res)=>{
     res.status(200).send("server working");
 })
-
-
 
 
 
