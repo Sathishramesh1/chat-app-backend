@@ -6,6 +6,27 @@ import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
 
 
+export const allUsers = async (req, res) => {
+    const keyword = req.query.search
+      ? {
+          $or: [
+            { name: { $regex: req.query.search, $options: "i" } },
+            { email: { $regex: req.query.search, $options: "i" } },
+          ],
+        }
+      : {};
+      try {
+        const users = await User.find({
+            ...searchQuery,
+            _id: { $ne: req.user._id } 
+        });
+        res.send(users);
+    } catch (error) {
+        res.status(500).send({ message: "Internal server error" });
+    }
+    
+  };
+
 
 //function to handle new user registration
 export const Register=async(req,res)=>{

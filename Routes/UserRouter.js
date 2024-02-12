@@ -1,5 +1,5 @@
 import express from 'express'
-import {Register} from '../controller/userController.js'
+import {Register, allUsers} from '../controller/userController.js'
 import {Login} from '../controller/userController.js'
 import {Forget} from '../controller/userController.js'
 import {Reset} from '../controller/userController.js'
@@ -12,6 +12,8 @@ router.route('/register').post(Register);
 
 //route for login
 router.route('/login').post(Login);
+
+router.route('/alluser').get(allUsers);
 
 //route for generating password reset mail
 router.route('/forget').post(Forget);
