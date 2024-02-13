@@ -40,17 +40,10 @@ export const Register=async(req,res)=>{
 
     const {password}=req.body;
     const hashedPassword = await bcrypt.hash(password,10);
-    
-    // Generate a ActivationKey
-//  const ActivationKey = jwt.sign({id:req.body.email}, process.env.SECRET_KEY);;
- 
+  
 
     const newUser= await new User({ ...req.body, password: hashedPassword }).save();
 
-// const activationurl=`https://url-shortner96.netlify.app/activate/${ActivationKey}`
-//     sendMail(req.body.email,"Activation Link",`
-//     Click below link to activate your account
-//     ${activationurl}`);
     
     res.status(201).json({
         status:'success',
@@ -75,11 +68,7 @@ export const Login=async(req,res)=>{
 if (!user) {
     return res.status(401).json({ message: "Email is not Registered" });
       }
-
-//  if(!user.isActivated){
-//     return res.status(401).json({message:'Your account not activated,Check the registered Email to Activated account'});
-
-//  }     
+  
 
 const passwordMatch = await bcrypt.compare(password, user.password);
 
