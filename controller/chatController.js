@@ -10,7 +10,7 @@ export const accessChat=async(req,res)=>{
     const {userId}=req.body;
 
     if(!userId){
-        console.log("UserId param not sent with req");
+        // console.log("UserId param not sent with req");
     return res.status(400).send("unable to find the userId");}
 
 var isChat=await Chat.find({
@@ -27,7 +27,7 @@ isChat=await User.populate(isChat,{
 });
 
 if(isChat.length>0){
-    res.status(200).send(isChat[0]);
+    return res.status(200).send(isChat[0]);
 } else{
     var chatData={
         chatName:"sender",
@@ -40,10 +40,10 @@ try {
     const createChat=await Chat.create(chatData);
     const FullChat= await Chat.findOne({_id:createChat._id}).populate("users","-password");
 
-    res.status(200).send(FullChat);
+   return  res.status(200).send(FullChat);
     
 } catch (error) {
-    res.status(400).send(error);
+     return res.status(400).send(error);
 
 }
 }
