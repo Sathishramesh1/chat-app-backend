@@ -3,6 +3,7 @@ import {Register, allUsers} from '../controller/userController.js'
 import {Login} from '../controller/userController.js'
 import {Forget} from '../controller/userController.js'
 import {Reset} from '../controller/userController.js'
+import { isAuthorized } from '../middleware/isAuthorised.js'
 
 
 const router=express.Router();
@@ -13,7 +14,7 @@ router.route('/register').post(Register);
 //route for login
 router.route('/login').post(Login);
 
-router.route('/alluser').get(allUsers);
+router.route('/alluser').get(isAuthorized,allUsers);
 
 //route for generating password reset mail
 router.route('/forget').post(Forget);
