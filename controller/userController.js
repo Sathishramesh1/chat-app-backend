@@ -17,10 +17,10 @@ export const allUsers = async (req, res) => {
       : {};
       try {
         const users = await User.find({
-            ...searchQuery,
+            ...keyword,
             _id: { $ne: req.user._id } 
         });
-        res.send(users);
+        res.status(200).json(users);
     } catch (error) {
         res.status(500).send({ message: "Internal server error" });
     }
