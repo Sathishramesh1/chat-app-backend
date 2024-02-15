@@ -70,7 +70,7 @@ const io = new Server(httpServer, {
      chat.users.forEach((user)=>{
 
      if(user._id==newMessage.sender._id) return;
-     socket.in(user._id).emit("message received",messageReceived)
+     socket.to(user._id).emit("message received",newMessage)
         
      });
 
