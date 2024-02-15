@@ -63,17 +63,18 @@ const io = new Server(httpServer, {
     });
 
     socket.on("new message",(newMessage)=>{
-     const chat=newMessage.chat;
+     const chat=newMessage._id;
      if(!chat){
-        return console.log("chat.user is not defined");
-     }
-     chat.users.forEach((user)=>{
-
-     if(user._id==newMessage.sender._id) return;
-     socket.to(user._id).emit("message received",newMessage)
+        socket.emit("error", { message: "Chat ID is not defined in the new message" });
+        return;
         
-     });
-
+     }
+    
+     
+    
+     socket.broadcast.to(chat).emit("message received",newMessage)
+        
+    
     })
     // Example: Listen for a "disconnect" event
     socket.on("disconnect", () => {
