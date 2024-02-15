@@ -60,8 +60,21 @@ const io = new Server(httpServer, {
         console.log(room)
         socket.join(room)
 
-    })
+    });
 
+    socket.on("new message",(newMessage)=>{
+     const chat=newMessage.chat;
+     if(!chat){
+        return console.log("chat.user is not defined");
+     }
+     chat.users.forEach((user)=>{
+
+     if(user._id==newMessage.sender._id) return;
+     socket.in(user._id).emit("message received",messageReceived)
+        
+     });
+
+    })
     // Example: Listen for a "disconnect" event
     socket.on("disconnect", () => {
         console.log("User disconnected");
