@@ -56,7 +56,7 @@ export const getChat=async (req,res)=>{
     try {
         Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
           .populate("users", "-password")
-        //   .populate("groupAdmin", "-password")
+          .populate("groupAdmin", "-password")
           .populate("latestMessage")
           .sort({ updatedAt: -1 })
           .then(async (results) => {
@@ -65,11 +65,12 @@ export const getChat=async (req,res)=>{
               path: "latestMessage.sender",
               select: "name pic email",
             });
-            res.status(200).send(results);
+         return   res.status(200).send(results);
           });
       } catch (error) {
-        res.status(400);
+        res.status(500);
         throw new Error(error.message);
+        
       }
 
 }

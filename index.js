@@ -1,5 +1,6 @@
 import  express  from "express";
-
+import { createServer } from "http";
+import { Server } from "socket.io";
 import cors from 'cors'
 import dotenv from 'dotenv'
 import { dbconnection } from "./config/dataBase.js";
@@ -34,6 +35,40 @@ app.get("/",(req,res)=>{
 
 
 
-app.listen(PORT,()=>{
-    console.log("server running on ",PORT);  
-})
+
+
+
+const httpServer = createServer(app);
+const io = new Server(httpServer, { 
+    cors:{
+        origin:"*",
+
+    },
+    pingTimeout:60000
+ });
+
+ io.on("connection", (socket) => {
+    console.log("A user connected");
+
+    socket.on("setup",(user)=>{
+        socket.join(user.data.id);
+        socket.emit("connected")
+
+    });
+
+    socket.on("join chat",(room)=>{
+        console.log(room)
+        socket.join(room)
+
+    })
+
+    // Example: Listen for a "disconnect" event
+    socket.on("disconnect", () => {
+        console.log("User disconnected");
+    });
+});
+  
+  // Start the HTTP server
+httpServer.listen(PORT, () => {
+    console.log("Server running on ", PORT);
+});
