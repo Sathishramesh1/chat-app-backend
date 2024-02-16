@@ -58,7 +58,7 @@ export const allMessage=async(req,res)=>{
             path: "chat",
             populate: {
                 path: "users",
-                select: "name pic email -password" 
+                select: "name pic email " 
             }
         });
 
