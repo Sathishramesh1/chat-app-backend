@@ -78,7 +78,7 @@ if (!passwordMatch) {
            
 const jwttoken = jwt.sign({id:user._id}, process.env.SECRET_KEY);
         
-          res.status(200).json({ jwttoken,id:req.user.id,message:"login success" });    
+          res.status(200).json({ jwttoken,id:req.user._id,message:"login success" });    
     } 
     catch (error) {
         console.log(error);
