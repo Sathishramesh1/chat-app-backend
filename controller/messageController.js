@@ -54,7 +54,13 @@ export const allMessage=async(req,res)=>{
     
         const message=await Message.find({chat:req.params.chatId})
         .populate("sender","name pic email")
-        .populate("chat")
+        .populate({
+            path: "chat",
+            populate: {
+                path: "users",
+                select: "name pic email -password" 
+            }
+        });
 
         return res.status(200).json(message);
         
