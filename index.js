@@ -56,8 +56,13 @@ const io = new Server(httpServer, {
         socket.join(user.data.id);
         onlineUsers[user.data.id] = socket.id; // Add user to online users
         socket.emit("connected");
+        // Emit online users to the newly connected user
+    socket.emit("onlineUsers", Object.keys(onlineUsers));
+    
 
     });
+
+    
 
     socket.on("join chat",(room)=>{
         console.log(room)
