@@ -58,7 +58,8 @@ const io = new Server(httpServer, {
         socket.emit("connected");
         // Emit online users to the newly connected user
     socket.emit("onlineUsers", Object.keys(onlineUsers));
-    
+    console.logObject.keys(onlineUsers)
+
 
     });
 
