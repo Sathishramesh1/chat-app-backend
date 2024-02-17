@@ -37,6 +37,8 @@ app.get("/",(req,res)=>{
 
 
 
+// Object to track online users
+const onlineUsers = {};
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, { 
@@ -52,7 +54,8 @@ const io = new Server(httpServer, {
 
     socket.on("setup",(user)=>{
         socket.join(user.data.id);
-        socket.emit("connected")
+        onlineUsers[user.data.id] = socket.id; // Add user to online users
+        socket.emit("connected");
 
     });
 
@@ -70,15 +73,22 @@ const io = new Server(httpServer, {
         
      }
     
-     
-    
      socket.broadcast.to(chat).emit("message received",newMessage)
         
-    
-    })
+    });
+     // Handle typing event
+     socket.on("typing", (data) => {
+        const { chatId, isTyping } = data;
+        socket.broadcast.to(chatId).emit("typing", { userId: socket.id, isTyping });
+    });
     // Example: Listen for a "disconnect" event
     socket.on("disconnect", () => {
         console.log("User disconnected");
+        // Remove user from online users
+        const userId = Object.keys(onlineUsers).find(key => onlineUsers[key] === socket.id);
+        if (userId) {
+            delete onlineUsers[userId];
+        }
     });
 });
   
