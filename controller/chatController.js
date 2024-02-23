@@ -51,28 +51,29 @@ try {
 
 //function to get  chat history
 
-export const getChat=async (req,res)=>{
-
-    try {
-        Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
-          .populate("users", "-password")
+export const getChat = async (req, res) => {
+  try {
+      const chats = await Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
+          .populate({
+              path: "users",
+              select: "-password" // Exclude sensitive information like password
+          })
           .populate("groupAdmin", "-password")
-          .populate("latestMessage")
-          .sort({ updatedAt: -1 })
-          .then(async (results) => {
-            
-            results = await User.populate(results, {
-              path: "latestMessage.sender",
-              select: "name pic email",
-            });
-         return   res.status(200).send(results);
-          });
-      } catch (error) {
-        res.status(500);
-        throw new Error(error.message);
-        
+          .populate({
+              path: "latestMessage",
+              populate: { path: "sender", select: "name pic email" }
+          })
+          .sort({ updatedAt: -1 });
+
+      if (!chats) {
+          return res.status(404).json({ error: "Chats not found." });
       }
 
+      return res.status(200).json(chats);
+  } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Internal Server Error" });
+  }
 }
 
 
