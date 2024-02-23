@@ -188,40 +188,27 @@ export const createGroupChat = async (req, res) => {
 
   }
 
-  //add new user to group
-  export const addUser=async(req,res)=>{
-  
+  export const addUser = async (req, res) => {
     try {
-      const {chatId,userId}=req.body;
+        const { chatId, userId } = req.body;
 
-      if(!chatId || !userId){
-        res.status(404);
-    throw new Error("Chat Not Found");
-      }
-      const addedUser = await Chat.findByIdAndUpdate(
-        chatId,
-        {
-          $push: { users: userId },
-        },
-        {
-          new: true,
+        if (!chatId || !userId) {
+            return res.status(400).json({ error: "Chat ID or User ID is missing." });
         }
-      )
-        .populate("users", "-password")
-        .populate("groupAdmin", "-password");
 
-     
-  if (!added) {
-       res.status(404);
-        throw new Error("Chat Not Found");
-  } else {
-       return  res.status(200).json(added);
-  }
-      
+        const addedUser = await Chat.findByIdAndUpdate(
+            chatId,
+            { $addToSet: { users: userId } }, // Using $addToSet to prevent adding duplicate users
+            { new: true }
+        ).populate("users", "-password").populate("groupAdmin", "-password");
+
+        if (!addedUser) {
+            return res.status(404).json({ error: "Chat not found." });
+        }
+
+        return res.status(200).json(addedUser);
     } catch (error) {
-      console.error(error);
+        console.error(error);
         return res.status(500).send("Internal Server Error");
-        
-      
     }
-  }
+}
