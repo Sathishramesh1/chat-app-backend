@@ -85,6 +85,7 @@ export const createGroupChat = async (req, res) => {
   
     // var users = JSON.parse(req.body.users);
     const users=req.body.users
+    users.push(req.user);
   
     if (users.length < 2) {
       return res
@@ -92,7 +93,7 @@ export const createGroupChat = async (req, res) => {
         .send("More than 2 users are required to form a group chat");
     }
   
-    users.push(req.user);
+    
   
     try {
       const groupChat = await Chat.create({
