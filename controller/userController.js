@@ -148,8 +148,7 @@ export const Forget = async(req,res)=>{
     
     }
 
-    export //function for resetting password
-    const Reset=async(req,res)=>{
+    export const Reset=async(req,res)=>{
     try {
         const { resetToken } = req.params;
         const { password } = req.body;
